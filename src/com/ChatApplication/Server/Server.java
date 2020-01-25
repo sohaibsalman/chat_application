@@ -49,7 +49,6 @@ public class Server
         try
         {
             server = new ServerSocket(8046);
-            System.out.println("a");
             gui.txtStats.append("Server Started");
             list = new Vector<>();
             
