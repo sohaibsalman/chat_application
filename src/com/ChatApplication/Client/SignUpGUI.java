@@ -260,6 +260,10 @@ public class SignUpGUI extends javax.swing.JFrame
         if(d.signUpUser(arr))
         {
             JOptionPane.showMessageDialog(this, "Account Creation Successfull", "Success", JOptionPane.PLAIN_MESSAGE);
+            
+            d.createUserTable(txtUsername.getText());
+            
+            
         } 
         else
         {

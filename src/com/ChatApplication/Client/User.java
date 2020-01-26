@@ -88,5 +88,18 @@ public class User
     {
         this.fall = fall;
     }
+
+    public User(String rollNo)
+    {
+        DbUtil.initUser(rollNo, this);
+    }
+
+    @Override
+    public String toString()
+    {
+        return name;
+    }
+    
+    
     
 }

@@ -168,7 +168,6 @@ public class LoginGUI extends javax.swing.JFrame
         user.add(txtPassword.getText());
         
         DbUtil d = new DbUtil();
-        Client c;
         
         JOptionPane option = new JOptionPane();
         
@@ -176,8 +175,9 @@ public class LoginGUI extends javax.swing.JFrame
         {
             option.showMessageDialog(this, "Login Successful", "Success", JOptionPane.PLAIN_MESSAGE);
             this.dispose();
-            
-            c = new Client("localhost", 8046, "Chat Application " + txtID.getText());
+            User u = new User(txtID.getText());
+            new HomeGUI(u).setVisible(true);
+            //new Client("localhost", 8046, "Chat Application " + txtID.getText());
         } 
         else 
         {

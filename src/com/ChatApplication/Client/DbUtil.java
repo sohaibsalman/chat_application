@@ -9,7 +9,11 @@ import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.Vector;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javax.swing.DefaultListModel;
 
 /**
  *
@@ -17,20 +21,26 @@ import java.util.Vector;
  */
 public class DbUtil
 {
-    private Connection conn;
+    private static Connection conn;
+
     private PreparedStatement pstat;
     private ResultSet res;
 
     public DbUtil()
     {
-        try 
+        connectDb();
+    }
+    
+    public static void connectDb() 
+    {
+        try
         {
             Class.forName("com.mysql.jdbc.Driver");
             conn = DriverManager.getConnection("jdbc:mysql://localhost:3306/chatapp", "root", "");
-        }
-        catch(Exception e)
+
+        } catch (Exception ex)
         {
-            e.printStackTrace();
+            ex.printStackTrace();
         }
     }
     
@@ -115,5 +125,96 @@ public class DbUtil
         return false;
     }
     
+    public static void initUser(String rollNo, User ref)
+    {
+        try
+        {
+            if(conn.isClosed())
+                connectDb();
+            String query = "SELECT * FROM users WHERE rollno = ?";
+            
+            ResultSet res;
+            PreparedStatement st = conn.prepareStatement(query);
+            
+            st.setString(1, rollNo);
+            res = st.executeQuery();
+
+            res.next();
+
+            ref.setRollNo(res.getString(1));
+            ref.setName(res.getString(2));
+            ref.setPassword(res.getString(3));
+            ref.setDegree(res.getString(4));
+            ref.setSection(res.getString(5));
+            ref.setFall(res.getString(6));   
+        } 
+        catch (Exception ex)
+        {
+            ex.printStackTrace();
+        }           
+    }
     
+    static void initChatList(DefaultListModel<User> model, User user)
+    {
+        try
+        {
+            //Check DB Connection
+            if(conn.isClosed())
+                connectDb();
+            
+            PreparedStatement pstat;
+            ResultSet res;
+            
+            String query = "SELECT * FROM chat_list WHERE sender_id = ?";
+            
+            pstat = conn.prepareStatement(query);
+            pstat.setString(1, user.getRollNo());
+            
+            res = pstat.executeQuery();
+            
+            while(res.next())
+            {
+                User temp = new User(res.getString(2));
+                model.addElement(temp);
+            }
+        } 
+        catch (Exception e)
+        {
+            e.printStackTrace();
+        }
+    }
+
+    void createUserTable(String tableName)
+    {
+        try
+        {
+           if(conn.isClosed())
+               connectDb();
+           String query = "CREATE TABLE " + tableName + " (sender_id varchar(10), receiver_id varchar(10), message varchar(1000), time datetime)";
+           pstat = conn.prepareStatement(query);
+           pstat.execute();
+        } 
+        catch (Exception e)
+        {
+            e.printStackTrace();
+        }
+    }
+    
+    static void showChat(String r_table, String s_table)
+    {
+        try
+        {
+            
+            String query = "SELECT " + s_table + ".message, " + r_table + ".message "
+                    + "FROM " + s_table + ", " + r_table + " "
+                    + "WHERE " + s_table + ".sender_id = " + r_table + ".receiver_id";
+            
+            
+        }
+        catch (Exception e)
+        {
+            e.printStackTrace();
+        } 
+    }
+
 }
