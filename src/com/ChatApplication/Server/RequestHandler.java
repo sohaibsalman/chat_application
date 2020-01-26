@@ -5,6 +5,7 @@
  */
 package com.ChatApplication.Server;
 
+import com.ChatApplication.Client.HomeGUI;
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
@@ -42,15 +43,14 @@ public class RequestHandler extends Thread
             {
                 msgReceived = in.readUTF();
                 
-                StringTokenizer token = new StringTokenizer(msgReceived, "@");
-                String message = token.nextToken();
-                String receiver = token.nextToken();
+                String receiver = HomeGUI.receiver;
+                HomeGUI.user.getRollNo();
                 
                 for(RequestHandler hnd : Server.list)
                 {
                     if(hnd.username.equals(receiver))
                     {
-                        hnd.out.writeUTF(username + " : " + message);
+                        hnd.out.writeUTF(username + " : " + msgReceived);
                         break;
                     }
                 }

@@ -10,6 +10,8 @@ import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Timestamp;
+import java.util.Date;
 import java.util.Vector;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -242,8 +244,25 @@ public class DbUtil
         } 
     }
 
-    static void addMessage(String message, String rollNo, String text)
+    static void addMessage(String message, String s_id, String r_id)
     {
+        try
+        {
+            if(conn.isClosed())
+            connectDb();
+        
+            String query = "INSERT INTO " + s_id + " VALUES "
+                    + "('" 
+                    + s_id + "' , '" + r_id + "', '" + message + "', CURRENT_TIMESTAMP "
+                    + ")";
+            PreparedStatement st = conn.prepareStatement(query);
+            st.executeUpdate();
+            
+        }
+        catch (Exception e)
+        {
+            e.printStackTrace();
+        }
         
     }
 

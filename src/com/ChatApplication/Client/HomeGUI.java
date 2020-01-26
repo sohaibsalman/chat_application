@@ -14,7 +14,9 @@ import javax.swing.JFrame;
  */
 public class HomeGUI extends javax.swing.JFrame
 {
-    User user;
+    public static User user;
+    public static String sender = null;
+    public static String receiver = null;
     DefaultListModel model = new DefaultListModel();
     
     
@@ -23,8 +25,8 @@ public class HomeGUI extends javax.swing.JFrame
      */
     public HomeGUI(User user)
     {
-        
         this.user = user;
+        sender = this.user.getRollNo();
         initComponents();
         chatBox.setLineWrap(true);
         messageField.setLineWrap(true);
@@ -175,6 +177,7 @@ public class HomeGUI extends javax.swing.JFrame
 
     private void chatsListMouseClicked(java.awt.event.MouseEvent evt)//GEN-FIRST:event_chatsListMouseClicked
     {//GEN-HEADEREND:event_chatsListMouseClicked
+        receiver = usernameLabel.getText();
         chatBox.setText(null);
         User temp = (User) chatsList.getSelectedValue();
         usernameLabel.setText(temp.getName());

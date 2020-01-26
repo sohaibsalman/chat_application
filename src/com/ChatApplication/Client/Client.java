@@ -23,15 +23,17 @@ public class Client
     DataOutputStream out;
     HomeGUI gui;
 
-    public Client(String ip, int port, String name)
+    public Client(String ip, int port, String name, User u)
     {
-        gui = new HomeGUI(null);
+        gui = new HomeGUI(u);
         gui.getFrame().setTitle(name);
         gui.setVisible(true);
         
         try
         {
+            
             socket = new Socket(ip, port);
+            
             
             in = new DataInputStream(socket.getInputStream());
             out = new DataOutputStream(socket.getOutputStream());
@@ -54,6 +56,7 @@ public class Client
                             
                             //Receive message
                             String messageReceived = in.readUTF();
+                            System.out.println(messageReceived);
                             gui.chatBox.append(gui.usernameLabel.getText() + ": \n");
                             gui.chatBox.append(messageReceived + "\n\n");
                         } 

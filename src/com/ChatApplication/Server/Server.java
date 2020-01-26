@@ -5,6 +5,8 @@
  */
 package com.ChatApplication.Server;
 
+
+import com.ChatApplication.Client.HomeGUI;
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
@@ -29,6 +31,7 @@ public class Server
     //RECORD OF USERS
     static int userNum = 0;
     static Vector<RequestHandler> list;
+    public static String connector = null;
     
     //SERVER GUI
     ServerGUI gui;
@@ -65,6 +68,7 @@ public class Server
                             gui.txtStats.setText(gui.txtStats.getText() + "\n\n" + "Server is waiting for client...");
                             socket = server.accept();
                             
+                            
                             gui.txtStats.setText(gui.txtStats.getText() + "\n\n" + "Connection established with client " + socket);
                             
                             in = new DataInputStream(socket.getInputStream());
@@ -73,7 +77,8 @@ public class Server
                             //Assigning to new thread
                             gui.txtStats.setText(gui.txtStats.getText() + "\n\n" + "Assigning Request to new thread...");
                             
-                            RequestHandler hnd = new RequestHandler("user" + userNum, socket, in, out);
+                            System.out.println(connector);
+                            RequestHandler hnd = new RequestHandler(connector, socket, in, out);
                             
                             Thread t = new Thread(hnd);
                             t.start();

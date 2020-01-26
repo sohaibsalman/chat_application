@@ -5,6 +5,7 @@
  */
 package com.ChatApplication.Client;
 
+import com.ChatApplication.Server.Server;
 import java.util.Arrays;
 import java.util.Vector;
 import javax.swing.JOptionPane;
@@ -176,7 +177,8 @@ public class LoginGUI extends javax.swing.JFrame
             option.showMessageDialog(this, "Login Successful", "Success", JOptionPane.PLAIN_MESSAGE);
             this.dispose();
             User u = new User(txtID.getText());
-            new Client("localhost", 8046, "Chat Application " + txtID.getText());
+            Server.connector = txtID.getText();
+            new Client("localhost", 8046, "Chat Application " + txtID.getText(), u);
         } 
         else 
         {
