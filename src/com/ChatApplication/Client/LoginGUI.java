@@ -165,25 +165,39 @@ public class LoginGUI extends javax.swing.JFrame
     {//GEN-HEADEREND:event_btnLogin1ActionPerformed
         
         Vector<String> user = new Vector<>();
-        user.add(txtID.getText());
-        user.add(txtPassword.getText());
-        
-        DbUtil d = new DbUtil();
+        String id = txtID.getText();
+        String password = txtPassword.getText();
         
         JOptionPane option = new JOptionPane();
         
-        if(d.loginUser(user))
+        if(id.equals("") || password.equals(""))
         {
-            option.showMessageDialog(this, "Login Successful", "Success", JOptionPane.PLAIN_MESSAGE);
-            this.dispose();
-            User u = new User(txtID.getText());
-            Server.connector = txtID.getText();
-            new Client("localhost", 8046, "Chat Application " + txtID.getText(), u);
-        } 
+            option.showMessageDialog(this, "Please all the fields", "Error", JOptionPane.ERROR_MESSAGE);
+        }
         else 
         {
-            option.showMessageDialog(this, "Invalid Credentials", "Error", JOptionPane.ERROR_MESSAGE);
+            user.add(txtID.getText());
+            user.add(txtPassword.getText());
+
+
+            DbUtil d = new DbUtil();
+
+
+            if(d.loginUser(user))
+            {
+                option.showMessageDialog(this, "Login Successful", "Success", JOptionPane.PLAIN_MESSAGE);
+                this.dispose();
+                User u = new User(txtID.getText());
+                Server.connector = txtID.getText();
+                new Client("localhost", 8046, "Chat Application " + txtID.getText(), u);
+            } 
+            else 
+            {
+                option.showMessageDialog(this, "Invalid Credentials", "Error", JOptionPane.ERROR_MESSAGE);
+            }
+        
         }
+        
         
     }//GEN-LAST:event_btnLogin1ActionPerformed
 

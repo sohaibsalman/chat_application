@@ -49,7 +49,6 @@ public class SignUpGUI extends javax.swing.JFrame
         txtFall = new javax.swing.JTextField();
         txtPassword = new javax.swing.JPasswordField();
         btnSignUp = new javax.swing.JButton();
-        btnLogin = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setResizable(false);
@@ -115,18 +114,6 @@ public class SignUpGUI extends javax.swing.JFrame
             }
         });
 
-        btnLogin.setBackground(new java.awt.Color(153, 0, 0));
-        btnLogin.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
-        btnLogin.setForeground(new java.awt.Color(255, 255, 255));
-        btnLogin.setText("Login");
-        btnLogin.addActionListener(new java.awt.event.ActionListener()
-        {
-            public void actionPerformed(java.awt.event.ActionEvent evt)
-            {
-                btnLoginActionPerformed(evt);
-            }
-        });
-
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
@@ -151,15 +138,11 @@ public class SignUpGUI extends javax.swing.JFrame
                             .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                             .addComponent(degreeField, javax.swing.GroupLayout.PREFERRED_SIZE, 60, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                            .addComponent(sectionField, javax.swing.GroupLayout.PREFERRED_SIZE, 84, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                            .addComponent(sectionField, javax.swing.GroupLayout.PREFERRED_SIZE, 84, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addComponent(btnSignUp, javax.swing.GroupLayout.PREFERRED_SIZE, 90, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addGap(28, 28, 28)
-                        .addComponent(jLabel1))
-                    .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addGap(77, 77, 77)
-                        .addComponent(btnSignUp, javax.swing.GroupLayout.PREFERRED_SIZE, 90, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(btnLogin, javax.swing.GroupLayout.PREFERRED_SIZE, 90, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addComponent(jLabel1)))
                 .addGap(78, 78, 78))
         );
         jPanel1Layout.setVerticalGroup(
@@ -184,9 +167,7 @@ public class SignUpGUI extends javax.swing.JFrame
                 .addGap(18, 18, 18)
                 .addComponent(txtFall, javax.swing.GroupLayout.PREFERRED_SIZE, 52, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(btnSignUp, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(btnLogin, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addComponent(btnSignUp, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap(58, Short.MAX_VALUE))
         );
 
@@ -221,62 +202,66 @@ public class SignUpGUI extends javax.swing.JFrame
 
     private void btnSignUpActionPerformed(java.awt.event.ActionEvent evt)//GEN-FIRST:event_btnSignUpActionPerformed
     {//GEN-HEADEREND:event_btnSignUpActionPerformed
-        Vector<String> arr = new Vector<>();
         
-        //add data to String vector
-        arr.add(txtName.getText());
-        arr.add(txtUsername.getText());
-        arr.add(txtPassword.getText());
-        
-        int temp = programField.getSelectedIndex();
-        
-        String combo = "";
-        if(temp == 0)
-            combo = "BS";
-        else 
-            combo = "MS";
-        arr.add(combo);
-        
-        temp = degreeField.getSelectedIndex();
-        if(temp == 0)
-            combo = "IT";
-        else if(temp == 1)
-            combo = "SE";
-        else
-            combo = "CS";
-        arr.add(combo);
-
-        temp = sectionField.getSelectedIndex();
-        if(temp == 0)
-            combo = "Afternoon";
-        else
-            combo = "Morning";
-        arr.add(combo);
-        
-        arr.add(txtFall.getText());
-        
-        DbUtil d = new DbUtil();
-        
-        if(d.signUpUser(arr))
+        if(txtName.getText().equals("") || txtUsername.getText().equals("") || txtPassword.getText().equals("") || txtFall.getText().equals(""))
         {
-            JOptionPane.showMessageDialog(this, "Account Creation Successfull", "Success", JOptionPane.PLAIN_MESSAGE);
-            
-            d.createUserTable(txtUsername.getText());
-            
-            
-        } 
-        else
-        {
-            JOptionPane.showMessageDialog(this, "User Exists", "Error", JOptionPane.ERROR_MESSAGE);
+            JOptionPane.showMessageDialog(this, "Please fill all the Fields", "Error", JOptionPane.ERROR_MESSAGE);
         }
-    }//GEN-LAST:event_btnSignUpActionPerformed
+        else 
+        {
+          
+            Vector<String> arr = new Vector<>();
 
-    private void btnLoginActionPerformed(java.awt.event.ActionEvent evt)//GEN-FIRST:event_btnLoginActionPerformed
-    {//GEN-HEADEREND:event_btnLoginActionPerformed
-        // TODO add your handling code here:
-        this.dispose();
-        new LoginGUI().setVisible(true);
-    }//GEN-LAST:event_btnLoginActionPerformed
+            //add data to String vector
+            arr.add(txtName.getText());
+            arr.add(txtUsername.getText());
+            arr.add(txtPassword.getText());
+
+            int temp = programField.getSelectedIndex();
+
+            String combo = "";
+            if(temp == 0)
+                combo = "BS";
+            else 
+                combo = "MS";
+            arr.add(combo);
+
+            temp = degreeField.getSelectedIndex();
+            if(temp == 0)
+                combo = "IT";
+            else if(temp == 1)
+                combo = "SE";
+            else
+                combo = "CS";
+            arr.add(combo);
+
+            temp = sectionField.getSelectedIndex();
+            if(temp == 0)
+                combo = "Afternoon";
+            else
+                combo = "Morning";
+            arr.add(combo);
+
+            arr.add(txtFall.getText());
+
+            DbUtil d = new DbUtil();
+
+            if(d.signUpUser(arr))
+            {
+                JOptionPane.showMessageDialog(this, "Account Creation Successfull", "Success", JOptionPane.PLAIN_MESSAGE);
+                //Create new User Table
+                d.createUserTable(txtUsername.getText());
+                //Back to Login Screen
+                this.dispose();
+                new LoginGUI().setVisible(true);
+            } 
+            else
+            {
+                JOptionPane.showMessageDialog(this, "User Exists", "Error", JOptionPane.ERROR_MESSAGE);
+            }
+        }
+        
+    }//GEN-LAST:event_btnSignUpActionPerformed
 
     /**
      * @param args the command line arguments
@@ -358,7 +343,6 @@ public class SignUpGUI extends javax.swing.JFrame
     }
     
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton btnLogin;
     private javax.swing.JButton btnSignUp;
     private javax.swing.JComboBox degreeField;
     private javax.swing.JLabel jLabel1;

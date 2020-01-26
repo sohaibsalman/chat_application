@@ -34,7 +34,6 @@ public class Client
             
             socket = new Socket(ip, port);
             
-            
             in = new DataInputStream(socket.getInputStream());
             out = new DataOutputStream(socket.getOutputStream());
             

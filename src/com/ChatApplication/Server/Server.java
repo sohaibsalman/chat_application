@@ -6,6 +6,7 @@
 package com.ChatApplication.Server;
 
 
+import com.ChatApplication.Client.Client;
 import com.ChatApplication.Client.HomeGUI;
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
@@ -27,7 +28,7 @@ public class Server
     private  Socket socket;
     private  DataInputStream in;
     private  DataOutputStream out;
-    
+        
     //RECORD OF USERS
     static int userNum = 0;
     static Vector<RequestHandler> list;
@@ -67,8 +68,7 @@ public class Server
                         {
                             gui.txtStats.setText(gui.txtStats.getText() + "\n\n" + "Server is waiting for client...");
                             socket = server.accept();
-                            
-                            
+                                                        
                             gui.txtStats.setText(gui.txtStats.getText() + "\n\n" + "Connection established with client " + socket);
                             
                             in = new DataInputStream(socket.getInputStream());

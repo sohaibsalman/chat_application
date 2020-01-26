@@ -44,13 +44,12 @@ public class RequestHandler extends Thread
                 msgReceived = in.readUTF();
                 
                 String receiver = HomeGUI.receiver;
-                HomeGUI.user.getRollNo();
                 
                 for(RequestHandler hnd : Server.list)
                 {
                     if(hnd.username.equals(receiver))
                     {
-                        hnd.out.writeUTF(username + " : " + msgReceived);
+                        hnd.out.writeUTF(msgReceived);
                         break;
                     }
                 }

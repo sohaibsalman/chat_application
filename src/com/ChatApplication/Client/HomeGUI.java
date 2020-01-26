@@ -5,6 +5,7 @@
  */
 package com.ChatApplication.Client;
 
+import java.awt.Font;
 import javax.swing.DefaultListModel;
 import javax.swing.JFrame;
 
@@ -14,7 +15,7 @@ import javax.swing.JFrame;
  */
 public class HomeGUI extends javax.swing.JFrame
 {
-    public static User user;
+    public User user;
     public static String sender = null;
     public static String receiver = null;
     DefaultListModel model = new DefaultListModel();
@@ -28,6 +29,8 @@ public class HomeGUI extends javax.swing.JFrame
         this.user = user;
         sender = this.user.getRollNo();
         initComponents();
+//        jLabel1.setText(this.user.getName());
+//        jLabel1.setFont(new Font("SansSerif", Font.BOLD, 20));
         chatBox.setLineWrap(true);
         messageField.setLineWrap(true);
         chatsList.setModel(model);
@@ -49,8 +52,6 @@ public class HomeGUI extends javax.swing.JFrame
     private void initComponents()
     {
 
-        jMenuItem1 = new javax.swing.JMenuItem();
-        jMenuItem2 = new javax.swing.JMenuItem();
         jPanel1 = new javax.swing.JPanel();
         jScrollPane1 = new javax.swing.JScrollPane();
         chatsList = new javax.swing.JList();
@@ -61,10 +62,6 @@ public class HomeGUI extends javax.swing.JFrame
         chatBox = new javax.swing.JTextArea();
         jScrollPane2 = new javax.swing.JScrollPane();
         messageField = new javax.swing.JTextArea();
-
-        jMenuItem1.setText("jMenuItem1");
-
-        jMenuItem2.setText("jMenuItem2");
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setBackground(new java.awt.Color(255, 255, 255));
@@ -85,8 +82,6 @@ public class HomeGUI extends javax.swing.JFrame
         });
         jScrollPane1.setViewportView(chatsList);
 
-        jPanel2.setBackground(new java.awt.Color(255, 255, 255));
-
         sendBtn.setText("Send");
         sendBtn.addActionListener(new java.awt.event.ActionListener()
         {
@@ -96,6 +91,7 @@ public class HomeGUI extends javax.swing.JFrame
             }
         });
 
+        chatBox.setEditable(false);
         chatBox.setColumns(20);
         chatBox.setRows(5);
         jScrollPane3.setViewportView(chatBox);
@@ -112,13 +108,15 @@ public class HomeGUI extends javax.swing.JFrame
                 .addContainerGap()
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel2Layout.createSequentialGroup()
-                        .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                        .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(jPanel2Layout.createSequentialGroup()
-                                .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 410, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(sendBtn))
-                            .addComponent(usernameLabel))
-                        .addGap(0, 0, Short.MAX_VALUE))
+                                .addGap(475, 475, 475)
+                                .addComponent(usernameLabel)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 123, Short.MAX_VALUE))
+                            .addGroup(jPanel2Layout.createSequentialGroup()
+                                .addComponent(jScrollPane2)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)))
+                        .addComponent(sendBtn))
                     .addComponent(jScrollPane3))
                 .addContainerGap())
         );
@@ -129,15 +127,13 @@ public class HomeGUI extends javax.swing.JFrame
                 .addComponent(usernameLabel)
                 .addGap(18, 18, 18)
                 .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, 520, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(18, 18, 18)
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(jPanel2Layout.createSequentialGroup()
-                        .addGap(18, 18, 18)
-                        .addComponent(sendBtn)
-                        .addContainerGap(67, Short.MAX_VALUE))
+                    .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel2Layout.createSequentialGroup()
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addContainerGap())))
+                        .addComponent(sendBtn)
+                        .addGap(29, 29, 29)))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
@@ -146,9 +142,9 @@ public class HomeGUI extends javax.swing.JFrame
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 161, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 313, Short.MAX_VALUE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap())
         );
         jPanel1Layout.setVerticalGroup(
@@ -156,9 +152,10 @@ public class HomeGUI extends javax.swing.JFrame
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 673, Short.MAX_VALUE)
-                    .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                .addContainerGap())
+                    .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addGap(0, 0, Short.MAX_VALUE)
+                        .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 646, javax.swing.GroupLayout.PREFERRED_SIZE))))
         );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
@@ -175,6 +172,16 @@ public class HomeGUI extends javax.swing.JFrame
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
+    private void sendBtnActionPerformed(java.awt.event.ActionEvent evt)//GEN-FIRST:event_sendBtnActionPerformed
+    {//GEN-HEADEREND:event_sendBtnActionPerformed
+
+    }//GEN-LAST:event_sendBtnActionPerformed
+
+    private void chatsListValueChanged(javax.swing.event.ListSelectionEvent evt)//GEN-FIRST:event_chatsListValueChanged
+    {//GEN-HEADEREND:event_chatsListValueChanged
+
+    }//GEN-LAST:event_chatsListValueChanged
+
     private void chatsListMouseClicked(java.awt.event.MouseEvent evt)//GEN-FIRST:event_chatsListMouseClicked
     {//GEN-HEADEREND:event_chatsListMouseClicked
         receiver = usernameLabel.getText();
@@ -182,22 +189,10 @@ public class HomeGUI extends javax.swing.JFrame
         User temp = (User) chatsList.getSelectedValue();
         usernameLabel.setText(temp.getName());
         DbUtil.showChat(temp.getRollNo(), user.getRollNo(), this);
-        
-        
+        }
+        /*
     }//GEN-LAST:event_chatsListMouseClicked
-
-    private void chatsListValueChanged(javax.swing.event.ListSelectionEvent evt)//GEN-FIRST:event_chatsListValueChanged
-    {//GEN-HEADEREND:event_chatsListValueChanged
-       
-    }//GEN-LAST:event_chatsListValueChanged
-
-    private void sendBtnActionPerformed(java.awt.event.ActionEvent evt)//GEN-FIRST:event_sendBtnActionPerformed
-    {//GEN-HEADEREND:event_sendBtnActionPerformed
-
-        
-
-    }//GEN-LAST:event_sendBtnActionPerformed
-
+*/
    public JFrame getFrame()
    {
        return this;
@@ -207,8 +202,6 @@ public class HomeGUI extends javax.swing.JFrame
     // Variables declaration - do not modify//GEN-BEGIN:variables
     public javax.swing.JTextArea chatBox;
     private javax.swing.JList chatsList;
-    private javax.swing.JMenuItem jMenuItem1;
-    private javax.swing.JMenuItem jMenuItem2;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JScrollPane jScrollPane1;
