@@ -21,11 +21,11 @@ public class Client
     Socket socket;
     DataInputStream in;
     DataOutputStream out;
-    ChatGUI gui;
+    HomeGUI gui;
 
     public Client(String ip, int port, String name)
     {
-        gui = new ChatGUI();
+        gui = new HomeGUI(null);
         gui.getFrame().setTitle(name);
         gui.setVisible(true);
         
@@ -50,11 +50,12 @@ public class Client
                         {
                             //Send Message
                             BtnHnd hnd = new BtnHnd(c);
-                            gui.btn.addActionListener(hnd);
+                            gui.sendBtn.addActionListener(hnd);
                             
                             //Receive message
                             String messageReceived = in.readUTF();
-                            gui.txt.setText(gui.txt.getText() + "\n" + messageReceived);
+                            gui.chatBox.append(gui.usernameLabel.getText() + ": \n");
+                            gui.chatBox.append(messageReceived + "\n\n");
                         } 
                         catch (IOException ex)
                         {

@@ -30,11 +30,16 @@ public class BtnHnd implements ActionListener
     {
         if(e.getActionCommand().equals("Send"))
         {
-            try {
-                String message = client.gui.tf.getText();
-                client.gui.tf.setText(null);
-                client.gui.txt.setText(client.gui.txt.getText() + "\n" + message);
+            try 
+            {
+                String message = client.gui.messageField.getText();
+                client.gui.messageField.setText(null);
+                client.gui.chatBox.append("ME: " + '\n' + message + "\n\n");
                 client.out.writeUTF(message);
+                
+                //Store to db
+                DbUtil.addMessage(message, client.gui.user.getRollNo(), client.gui.usernameLabel.getText());
+                
             } 
             catch (Exception ex) {
                 ex.printStackTrace();

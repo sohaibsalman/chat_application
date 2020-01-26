@@ -23,6 +23,7 @@ public class DbUtil
 {
     private static Connection conn;
 
+  
     private PreparedStatement pstat;
     private ResultSet res;
 
@@ -138,15 +139,18 @@ public class DbUtil
             
             st.setString(1, rollNo);
             res = st.executeQuery();
-
             res.next();
-
-            ref.setRollNo(res.getString(1));
-            ref.setName(res.getString(2));
-            ref.setPassword(res.getString(3));
-            ref.setDegree(res.getString(4));
-            ref.setSection(res.getString(5));
-            ref.setFall(res.getString(6));   
+//
+//            if(res.next())
+//            {             
+                ref.setRollNo(res.getString(1));
+                ref.setName(res.getString(2));
+                ref.setPassword(res.getString(3));
+                ref.setDegree(res.getString(4));
+                ref.setSection(res.getString(5));
+                ref.setFall(res.getString(6));   
+            //}
+  
         } 
         catch (Exception ex)
         {
@@ -165,16 +169,15 @@ public class DbUtil
             PreparedStatement pstat;
             ResultSet res;
             
-            String query = "SELECT * FROM chat_list WHERE sender_id = ?";
+            String query = "SELECT DISTINCT receiver_id FROM " + user.getRollNo();
             
             pstat = conn.prepareStatement(query);
-            pstat.setString(1, user.getRollNo());
             
             res = pstat.executeQuery();
             
             while(res.next())
             {
-                User temp = new User(res.getString(2));
+                User temp = new User(res.getString(1));
                 model.addElement(temp);
             }
         } 
@@ -200,15 +203,37 @@ public class DbUtil
         }
     }
     
-    static void showChat(String r_table, String s_table)
+    static void showChat(String r_table, String s_table, HomeGUI ref)
     {
         try
         {
+            if(conn.isClosed())
+                connectDb();
+//            String query = "SELECT " + s_table + ".message , " + r_table + ".message "
+//                    + "FROM " + s_table + " , " + r_table + " "
+//                    + "WHERE " + s_table + ".receiver_id(+) = " + r_table + ".sender_id";
             
-            String query = "SELECT " + s_table + ".message, " + r_table + ".message "
-                    + "FROM " + s_table + ", " + r_table + " "
-                    + "WHERE " + s_table + ".sender_id = " + r_table + ".receiver_id";
+            String query = "SELECT message, time, sender_id FROM " + s_table + " "
+                    + " WHERE receiver_id = '" + r_table 
+                    + "' UNION All "
+                    + "SELECT message, time, sender_id FROM " + r_table 
+                    + " WHERE receiver_id = '" + s_table 
+                    + "' ORDER BY time";
+             PreparedStatement st = conn.prepareStatement(query);
+            ResultSet rs = st.executeQuery();
             
+            while(rs.next())
+            {
+                if(rs.getString(3).equalsIgnoreCase(s_table))
+                {
+                    ref.chatBox.append("ME: " + '\n');
+                }
+                else 
+                {
+                    ref.chatBox.append(r_table.toUpperCase()+ ": \n");
+                }
+                ref.chatBox.append(rs.getString(1) + "\n\n");
+            }
             
         }
         catch (Exception e)
@@ -217,4 +242,11 @@ public class DbUtil
         } 
     }
 
+    static void addMessage(String message, String rollNo, String text)
+    {
+        
+    }
+
+    
+    
 }

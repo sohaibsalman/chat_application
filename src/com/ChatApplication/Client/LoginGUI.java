@@ -176,8 +176,7 @@ public class LoginGUI extends javax.swing.JFrame
             option.showMessageDialog(this, "Login Successful", "Success", JOptionPane.PLAIN_MESSAGE);
             this.dispose();
             User u = new User(txtID.getText());
-            new HomeGUI(u).setVisible(true);
-            //new Client("localhost", 8046, "Chat Application " + txtID.getText());
+            new Client("localhost", 8046, "Chat Application " + txtID.getText());
         } 
         else 
         {
