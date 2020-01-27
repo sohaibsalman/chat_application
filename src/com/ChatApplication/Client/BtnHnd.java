@@ -38,7 +38,7 @@ public class BtnHnd implements ActionListener
                 client.out.writeUTF(message);
                 
                 //Store to db
-                DbUtil.addMessage(message, client.gui.user.getRollNo(), client.gui.usernameLabel.getText());
+                DbUtil.addMessage(message, client.gui.user.getRollNo(), client.gui.receiverNameLabel.getText());
                 
             } 
             catch (Exception ex) {

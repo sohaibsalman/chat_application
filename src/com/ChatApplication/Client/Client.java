@@ -56,7 +56,7 @@ public class Client
                             //Receive message
                             String messageReceived = in.readUTF();
                             System.out.println(messageReceived);
-                            gui.chatBox.append(gui.usernameLabel.getText() + ": \n");
+                            gui.chatBox.append(gui.receiverNameLabel.getText() + ": \n");
                             gui.chatBox.append(messageReceived + "\n\n");
                         } 
                         catch (IOException ex)

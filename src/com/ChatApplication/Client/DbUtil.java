@@ -142,16 +142,15 @@ public class DbUtil
             st.setString(1, rollNo);
             res = st.executeQuery();
             res.next();
-//
-//            if(res.next())
-//            {             
+            
                 ref.setRollNo(res.getString(1));
                 ref.setName(res.getString(2));
                 ref.setPassword(res.getString(3));
-                ref.setDegree(res.getString(4));
-                ref.setSection(res.getString(5));
-                ref.setFall(res.getString(6));   
-            //}
+                ref.setProgram(res.getString(4));
+                ref.setDegree(res.getString(5));
+                ref.setSection(res.getString(6));
+                ref.setFall(res.getString(7));   
+
   
         } 
         catch (Exception ex)
