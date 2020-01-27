@@ -6,6 +6,9 @@
 package com.ChatApplication.Client;
 
 import java.awt.Font;
+import java.io.IOException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.DefaultListModel;
 import javax.swing.JFrame;
 
@@ -16,6 +19,7 @@ import javax.swing.JFrame;
 public class HomeGUI extends javax.swing.JFrame
 {
     public User user;
+    private Client client;
     public static String sender = null;
     public static String receiver = null;
     DefaultListModel model = new DefaultListModel();
@@ -24,8 +28,9 @@ public class HomeGUI extends javax.swing.JFrame
     /**
      * Creates new form HomeGUI
      */
-    public HomeGUI(User user)
+    public HomeGUI(User user, Client client)
     {
+        this.client = client;
         this.user = user;
         sender = this.user.getRollNo();
         
@@ -74,6 +79,7 @@ public class HomeGUI extends javax.swing.JFrame
         jSeparator2 = new javax.swing.JSeparator();
         eraseChatBtn = new javax.swing.JButton();
         jButton1 = new javax.swing.JButton();
+        jSeparator1 = new javax.swing.JSeparator();
         nameLabel = new javax.swing.JLabel();
         newChatBtn = new javax.swing.JButton();
         searchField = new javax.swing.JTextField();
@@ -110,8 +116,10 @@ public class HomeGUI extends javax.swing.JFrame
         chatPanel.setBackground(new java.awt.Color(44, 62, 80));
         chatPanel.setForeground(new java.awt.Color(255, 255, 255));
 
-        sendBtn.setText("Send");
-        /*
+        sendBtn.setBackground(new java.awt.Color(44, 62, 80));
+        sendBtn.setIcon(new javax.swing.ImageIcon(getClass().getResource("/com/ChatApplication/Server/images/icons8_send_letter_50px.png"))); // NOI18N
+        sendBtn.setToolTipText("Send Message");
+        sendBtn.setBorder(null);
         sendBtn.addActionListener(new java.awt.event.ActionListener()
         {
             public void actionPerformed(java.awt.event.ActionEvent evt)
@@ -119,7 +127,6 @@ public class HomeGUI extends javax.swing.JFrame
                 sendBtnActionPerformed(evt);
             }
         });
-        */
 
         chatScroll.setBorder(null);
 
@@ -132,12 +139,23 @@ public class HomeGUI extends javax.swing.JFrame
         chatBox.setBorder(null);
         chatScroll.setViewportView(chatBox);
 
-        messageField.setBackground(new java.awt.Color(44, 62, 80));
+        messageScroll.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(255, 255, 255)));
+        messageScroll.setHorizontalScrollBarPolicy(javax.swing.ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
+
+        messageField.setBackground(new java.awt.Color(34, 47, 62));
         messageField.setColumns(20);
         messageField.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
-        messageField.setForeground(new java.awt.Color(255, 255, 255));
+        messageField.setForeground(new java.awt.Color(204, 204, 204));
         messageField.setRows(5);
-        messageField.setText("Type a Message...");
+        messageField.setText("Type a Message..."); // NOI18N
+        messageField.setBorder(null);
+        messageField.addFocusListener(new java.awt.event.FocusAdapter()
+        {
+            public void focusGained(java.awt.event.FocusEvent evt)
+            {
+                messageFieldFocusGained(evt);
+            }
+        });
         messageScroll.setViewportView(messageField);
 
         receiverNameLabel.setFont(new java.awt.Font("Tahoma", 1, 16)); // NOI18N
@@ -172,13 +190,9 @@ public class HomeGUI extends javax.swing.JFrame
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, chatPanelLayout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(chatPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addComponent(jSeparator1)
                     .addComponent(jSeparator2)
                     .addComponent(chatScroll, javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(javax.swing.GroupLayout.Alignment.LEADING, chatPanelLayout.createSequentialGroup()
-                        .addComponent(messageScroll, javax.swing.GroupLayout.PREFERRED_SIZE, 658, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(sendBtn)
-                        .addGap(0, 2, Short.MAX_VALUE))
                     .addGroup(javax.swing.GroupLayout.Alignment.LEADING, chatPanelLayout.createSequentialGroup()
                         .addComponent(jLabel1)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
@@ -187,43 +201,49 @@ public class HomeGUI extends javax.swing.JFrame
                             .addGroup(chatPanelLayout.createSequentialGroup()
                                 .addComponent(receiverNameLabel)
                                 .addGap(104, 104, 104)))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(eraseChatBtn)
-                        .addGap(32, 32, 32)
-                        .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 429, Short.MAX_VALUE)
+                        .addComponent(eraseChatBtn, javax.swing.GroupLayout.PREFERRED_SIZE, 53, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(18, 18, 18)
+                        .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 52, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(javax.swing.GroupLayout.Alignment.LEADING, chatPanelLayout.createSequentialGroup()
+                        .addComponent(messageScroll)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(sendBtn)))
                 .addContainerGap())
         );
         chatPanelLayout.setVerticalGroup(
             chatPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(chatPanelLayout.createSequentialGroup()
-                .addGroup(chatPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(chatPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                        .addGroup(javax.swing.GroupLayout.Alignment.LEADING, chatPanelLayout.createSequentialGroup()
-                            .addGap(32, 32, 32)
-                            .addComponent(receiverNameLabel)
-                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                            .addComponent(receiverStatus)
-                            .addGap(14, 14, 14))
-                        .addGroup(chatPanelLayout.createSequentialGroup()
-                            .addContainerGap()
-                            .addGroup(chatPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                                .addComponent(eraseChatBtn, javax.swing.GroupLayout.PREFERRED_SIZE, 31, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 29, javax.swing.GroupLayout.PREFERRED_SIZE))
-                            .addGap(26, 26, 26)))
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, chatPanelLayout.createSequentialGroup()
+                .addGroup(chatPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addGroup(chatPanelLayout.createSequentialGroup()
                         .addContainerGap()
-                        .addComponent(jLabel1)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)))
+                        .addGroup(chatPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                            .addComponent(jButton1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(eraseChatBtn, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                        .addGap(26, 26, 26))
+                    .addGroup(javax.swing.GroupLayout.Alignment.LEADING, chatPanelLayout.createSequentialGroup()
+                        .addGroup(chatPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addGroup(javax.swing.GroupLayout.Alignment.LEADING, chatPanelLayout.createSequentialGroup()
+                                .addGap(32, 32, 32)
+                                .addComponent(receiverNameLabel)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(receiverStatus))
+                            .addGroup(javax.swing.GroupLayout.Alignment.LEADING, chatPanelLayout.createSequentialGroup()
+                                .addContainerGap()
+                                .addComponent(jLabel1)))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)))
                 .addComponent(jSeparator2, javax.swing.GroupLayout.PREFERRED_SIZE, 3, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(chatScroll, javax.swing.GroupLayout.PREFERRED_SIZE, 497, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(chatScroll, javax.swing.GroupLayout.PREFERRED_SIZE, 469, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(13, 13, 13)
+                .addComponent(jSeparator1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(chatPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(messageScroll, javax.swing.GroupLayout.PREFERRED_SIZE, 57, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, chatPanelLayout.createSequentialGroup()
                         .addComponent(sendBtn)
                         .addGap(14, 14, 14)))
-                .addContainerGap(31, Short.MAX_VALUE))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
         nameLabel.setFont(new java.awt.Font("Tahoma", 1, 16)); // NOI18N
@@ -242,6 +262,13 @@ public class HomeGUI extends javax.swing.JFrame
         searchField.setForeground(new java.awt.Color(204, 204, 204));
         searchField.setText("Search...");
         searchField.setBorder(null);
+        searchField.addFocusListener(new java.awt.event.FocusAdapter()
+        {
+            public void focusGained(java.awt.event.FocusEvent evt)
+            {
+                searchFieldFocusGained(evt);
+            }
+        });
 
         searchBtn.setBackground(new java.awt.Color(153, 0, 0));
         searchBtn.setIcon(new javax.swing.ImageIcon(getClass().getResource("/com/ChatApplication/Server/images/icons8_search_24px.png"))); // NOI18N
@@ -288,18 +315,21 @@ public class HomeGUI extends javax.swing.JFrame
             mainPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(mainPanelLayout.createSequentialGroup()
                 .addGroup(mainPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(mainPanelLayout.createSequentialGroup()
-                        .addGap(33, 33, 33)
-                        .addGroup(mainPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                            .addGroup(mainPanelLayout.createSequentialGroup()
-                                .addComponent(nameLabel)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                .addComponent(sectionLabel))
-                            .addComponent(newChatBtn)))
-                    .addGroup(mainPanelLayout.createSequentialGroup()
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, mainPanelLayout.createSequentialGroup()
                         .addContainerGap()
-                        .addComponent(userPic)))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(nameLabel)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(sectionLabel)
+                        .addGap(30, 30, 30))
+                    .addGroup(mainPanelLayout.createSequentialGroup()
+                        .addGroup(mainPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(mainPanelLayout.createSequentialGroup()
+                                .addContainerGap()
+                                .addComponent(userPic))
+                            .addGroup(mainPanelLayout.createSequentialGroup()
+                                .addGap(39, 39, 39)
+                                .addComponent(newChatBtn)))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)))
                 .addGroup(mainPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                     .addComponent(searchField)
                     .addComponent(searchBtn, javax.swing.GroupLayout.PREFERRED_SIZE, 34, javax.swing.GroupLayout.PREFERRED_SIZE))
@@ -337,15 +367,26 @@ public class HomeGUI extends javax.swing.JFrame
         receiverNameLabel.setVisible(true);
         chatPanel.setVisible(true);
         DbUtil.showChat(temp.getRollNo(), user.getRollNo(), this);
-        }
-        /*
     }//GEN-LAST:event_chatsListMouseClicked
 
     private void sendBtnActionPerformed(java.awt.event.ActionEvent evt)//GEN-FIRST:event_sendBtnActionPerformed
     {//GEN-HEADEREND:event_sendBtnActionPerformed
-
+        
+        String message = messageField.getText();
+        
+        messageField.setText(null);
+        chatBox.append("ME: " + '\n' + message + "\n\n");
+        try
+        {
+            client.out.writeUTF(message);
+            //Store to db
+            DbUtil.addMessage(message, client.gui.user.getRollNo(), client.gui.receiverNameLabel.getText());
+        } catch (IOException ex)
+        {
+            ex.printStackTrace();
+        }
     }//GEN-LAST:event_sendBtnActionPerformed
-*/
+
     private void searchBtnActionPerformed(java.awt.event.ActionEvent evt)//GEN-FIRST:event_searchBtnActionPerformed
     {//GEN-HEADEREND:event_searchBtnActionPerformed
         // TODO add your handling code here:
@@ -355,6 +396,24 @@ public class HomeGUI extends javax.swing.JFrame
     {//GEN-HEADEREND:event_eraseChatBtnActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_eraseChatBtnActionPerformed
+
+    private void messageFieldFocusGained(java.awt.event.FocusEvent evt)//GEN-FIRST:event_messageFieldFocusGained
+    {//GEN-HEADEREND:event_messageFieldFocusGained
+        // TODO add your handling code here:
+        if(messageField.getText().equalsIgnoreCase("Type a message..."))
+        {
+            messageField.setText("");
+        }
+    }//GEN-LAST:event_messageFieldFocusGained
+
+    private void searchFieldFocusGained(java.awt.event.FocusEvent evt)//GEN-FIRST:event_searchFieldFocusGained
+    {//GEN-HEADEREND:event_searchFieldFocusGained
+        // TODO add your handling code here:
+        if(searchField.getText().equalsIgnoreCase("search..."))
+        {
+            searchField.setText("");
+        }
+    }//GEN-LAST:event_searchFieldFocusGained
 
    public JFrame getFrame()
    {
@@ -370,6 +429,7 @@ public class HomeGUI extends javax.swing.JFrame
     private javax.swing.JButton eraseChatBtn;
     private javax.swing.JButton jButton1;
     private javax.swing.JLabel jLabel1;
+    private javax.swing.JSeparator jSeparator1;
     private javax.swing.JSeparator jSeparator2;
     private javax.swing.JScrollPane listPanel;
     private javax.swing.JPanel mainPanel;

@@ -25,7 +25,7 @@ public class Client
 
     public Client(String ip, int port, String name, User u)
     {
-        gui = new HomeGUI(u);
+        gui = new HomeGUI(u, this);
         gui.getFrame().setTitle(name);
         gui.setVisible(true);
         
