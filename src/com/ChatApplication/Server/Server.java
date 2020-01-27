@@ -13,6 +13,7 @@ import java.io.DataOutputStream;
 import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.util.ArrayList;
 import java.util.Vector;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -33,6 +34,7 @@ public class Server
     static int userNum = 0;
     static Vector<RequestHandler> list;
     public static String connector = null;
+    
     
     //SERVER GUI
     ServerGUI gui;
