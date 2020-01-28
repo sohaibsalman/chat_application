@@ -25,6 +25,8 @@ public class DbUtil
 {
     private static Connection conn;
 
+    
+
   
     private PreparedStatement pstat;
     private ResultSet res;
@@ -265,6 +267,38 @@ public class DbUtil
         
     }
 
-    
-    
+    static int searchUser(User me, String searchedUser)
+    {
+        try
+        {
+            if(conn.isClosed())
+                connectDb();
+            
+            String query = "SELECT rollno FROM users WHERE rollno = ? AND rollno <> ?";
+            PreparedStatement st = conn.prepareStatement(query);
+            st.setString(1, searchedUser);
+            st.setString(2, me.getRollNo());
+            
+            ResultSet s = st.executeQuery();
+            
+            if(s.next())
+            {
+                String q = "SELECT receiver_id FROM chat_list WHERE sender_id = ? AND receiver_id = ?";
+                PreparedStatement stat = conn.prepareStatement(q);
+                stat.setString(1, me.getRollNo());
+                stat.setString(2, searchedUser);
+                ResultSet s2 = stat.executeQuery();
+                if(s2.next())
+                    return 2;       //ALREADY ADDED
+                else
+                    return 1;       //NOT ADDED
+            }
+            
+        } 
+        catch (SQLException ex)
+        {
+            ex.printStackTrace();
+        }
+        return 0;
+    }
 }

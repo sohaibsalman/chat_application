@@ -198,10 +198,8 @@ public class HomeGUI extends javax.swing.JFrame
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addGroup(chatPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(receiverStatus)
-                            .addGroup(chatPanelLayout.createSequentialGroup()
-                                .addComponent(receiverNameLabel)
-                                .addGap(104, 104, 104)))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 429, Short.MAX_VALUE)
+                            .addComponent(receiverNameLabel))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 520, Short.MAX_VALUE)
                         .addComponent(eraseChatBtn, javax.swing.GroupLayout.PREFERRED_SIZE, 53, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(18, 18, 18)
                         .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 52, javax.swing.GroupLayout.PREFERRED_SIZE))
@@ -256,6 +254,13 @@ public class HomeGUI extends javax.swing.JFrame
         newChatBtn.setIcon(new javax.swing.ImageIcon(getClass().getResource("/com/ChatApplication/Server/images/icons8_add_35px.png"))); // NOI18N
         newChatBtn.setToolTipText("New Chat");
         newChatBtn.setBorder(null);
+        newChatBtn.addActionListener(new java.awt.event.ActionListener()
+        {
+            public void actionPerformed(java.awt.event.ActionEvent evt)
+            {
+                newChatBtnActionPerformed(evt);
+            }
+        });
 
         searchField.setBackground(new java.awt.Color(44, 62, 80));
         searchField.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
@@ -414,6 +419,14 @@ public class HomeGUI extends javax.swing.JFrame
             searchField.setText("");
         }
     }//GEN-LAST:event_searchFieldFocusGained
+
+    private void newChatBtnActionPerformed(java.awt.event.ActionEvent evt)//GEN-FIRST:event_newChatBtnActionPerformed
+    {//GEN-HEADEREND:event_newChatBtnActionPerformed
+        // TODO add your handling code here:
+        
+        new NewChatGUI(user).setVisible(true);
+        
+    }//GEN-LAST:event_newChatBtnActionPerformed
 
    public JFrame getFrame()
    {
