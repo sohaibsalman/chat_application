@@ -10,12 +10,14 @@ import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Statement;
 import java.sql.Timestamp;
 import java.util.Date;
 import java.util.Vector;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.DefaultListModel;
+import javax.swing.JLabel;
 
 /**
  *
@@ -24,6 +26,135 @@ import javax.swing.DefaultListModel;
 public class DbUtil
 {
     private static Connection conn;
+
+    static void addFriend(User user, String availableUser)
+    {
+        try
+        {
+            if(conn.isClosed())
+                connectDb();
+            
+            String query = "INSERT INTO chat_list VALUES (?,?)";
+            PreparedStatement st = conn.prepareStatement(query);
+            
+            st.setString(1, user.getRollNo());
+            st.setString(2, availableUser);
+            
+            
+            st.executeUpdate();
+            
+            
+            query = "INSERT INTO chat_list VALUES (?,?)";
+            st = conn.prepareStatement(query);
+
+            st.setString(1, availableUser);
+            st.setString(2, user.getRollNo());
+
+            st.executeUpdate();
+            
+        } catch (SQLException ex)
+        {
+            ex.printStackTrace();
+        }
+        
+    }
+
+    static void addHistory(String s_id, String r_id)
+    {
+        try
+        {
+            if(conn.isClosed())
+                connectDb();
+            String query = "INSERT INTO chat_list VALUES (?,?)";
+            PreparedStatement st = conn.prepareStatement(query);
+
+            st.setString(1, r_id);
+            st.setString(2, s_id);
+
+            st.executeUpdate();
+        } catch (SQLException ex)
+        {
+            ex.printStackTrace();
+        }
+        
+    }
+
+
+    static void initChatTable(User me, String r_id)
+    {
+                        System.out.println("in func");
+
+        try
+        {
+            if(conn.isClosed())            
+            {
+                connectDb();
+            }
+            connectDb();
+                String query = "CREATE TABLE " + me.getRollNo() + "_" + r_id + ""+  " (flow varchar(10), message varchar(1000), time datetime)";
+                PreparedStatement pstat = conn.prepareStatement(query);
+                pstat.execute();       
+                query = "CREATE TABLE " + r_id + "_" + me.getRollNo() + ""+  " (flow varchar(10), message varchar(1000), time datetime)";
+                pstat = conn.prepareStatement(query);
+                pstat.execute();  
+                
+                System.out.println("created");
+                
+                query = "INSERT INTO " + me.getRollNo() + "_" + r_id + " " + "VALUES (? , ? , CURRENT_TIMESTAMP)";
+                pstat = conn.prepareStatement(query);
+                pstat.setString(1, "null");
+                pstat.setString(2, "You added " + r_id);
+                pstat.executeUpdate();
+                
+                query = "INSERT INTO " + r_id + "_" + me.getRollNo() + " " + "VALUES (? , ? , CURRENT_TIMESTAMP)";
+                pstat = conn.prepareStatement(query);
+                pstat.setString(1, "null");
+                pstat.setString(2, me.getRollNo() + " added you...");
+                pstat.executeUpdate();
+        } 
+        catch (Exception e)
+        {
+            e.printStackTrace();
+        }
+    }
+
+    static void eraseChat(User user, JLabel receiverRollNo)
+    {
+        try
+        {
+            if(conn.isClosed())
+                connectDb();
+            String query = "TRUNCATE TABLE " + user.getRollNo() + "_" + receiverRollNo.getText();
+            Statement st = conn.createStatement();
+            st.executeUpdate(query);
+        }
+        catch (Exception e)
+        {
+            e.printStackTrace();
+        }
+    }
+
+    static void deleteUser(User user, String r_id)
+    {
+        try
+        {
+            if(conn.isClosed())
+                connectDb();
+            String query = "DROP TABLE " + user.getRollNo() + "_" + r_id;
+            Statement st = conn.createStatement();
+            st.executeUpdate(query);
+            
+            query = "DELETE chat_list WHERE sender_id = ? AND receiver_id = ?";
+            PreparedStatement stat = conn.prepareStatement(query);
+            stat.setString(1, user.getRollNo());
+            stat.setString(2, r_id);
+            stat.executeUpdate();
+        }
+        catch (Exception e)
+        {
+            e.printStackTrace();
+        }
+    }
 
     
 
@@ -172,10 +303,10 @@ public class DbUtil
             PreparedStatement pstat;
             ResultSet res;
             
-            String query = "SELECT DISTINCT receiver_id FROM " + user.getRollNo();
+            String query = "SELECT DISTINCT receiver_id FROM chat_list WHERE sender_id = ?"; 
             
             pstat = conn.prepareStatement(query);
-            
+            pstat.setString(1, user.getRollNo());
             res = pstat.executeQuery();
             
             while(res.next())
@@ -196,7 +327,7 @@ public class DbUtil
         {
            if(conn.isClosed())
                connectDb();
-           String query = "CREATE TABLE " + tableName + " (sender_id varchar(10), receiver_id varchar(10), message varchar(1000), time datetime)";
+           String query = "CREATE TABLE " + tableName + " (sender_id varchar(20), receiver_id varchar(20), message varchar(1000), time datetime)";
            pstat = conn.prepareStatement(query);
            pstat.execute();
         } 
@@ -216,18 +347,30 @@ public class DbUtil
 //                    + "FROM " + s_table + " , " + r_table + " "
 //                    + "WHERE " + s_table + ".receiver_id(+) = " + r_table + ".sender_id";
             
-            String query = "SELECT message, time, sender_id FROM " + s_table + " "
-                    + " WHERE receiver_id = '" + r_table 
-                    + "' UNION All "
-                    + "SELECT message, time, sender_id FROM " + r_table 
-                    + " WHERE receiver_id = '" + s_table 
-                    + "' ORDER BY time";
-             PreparedStatement st = conn.prepareStatement(query);
+//            String query = "SELECT message, time, sender_id FROM " + s_table + " "
+//                    + " WHERE receiver_id = '" + r_table 
+//                    + "' UNION All "
+//                    + "SELECT message, time, sender_id FROM " + r_table 
+//                    + " WHERE receiver_id = '" + s_table 
+//                    + "' ORDER BY time";
+            String query = "SELECT flow, message, time FROM " + s_table + "_" + r_table + "";
+            PreparedStatement st = conn.prepareStatement(query);
             ResultSet rs = st.executeQuery();
             
             while(rs.next())
             {
-                if(rs.getString(3).equalsIgnoreCase(s_table))
+//                if(rs.getString(3).equalsIgnoreCase(s_table))
+//                {
+//                    ref.chatBox.append("ME: " + '\n');
+//                }
+//                else 
+//                {
+//                    ref.chatBox.append(r_table.toUpperCase()+ ": \n");
+//                }
+//                ref.chatBox.append(rs.getString(1) + "\n\n");
+                
+                
+                if(rs.getString(1).equalsIgnoreCase("sent"))
                 {
                     ref.chatBox.append("ME: " + '\n');
                 }
@@ -235,7 +378,7 @@ public class DbUtil
                 {
                     ref.chatBox.append(r_table.toUpperCase()+ ": \n");
                 }
-                ref.chatBox.append(rs.getString(1) + "\n\n");
+                ref.chatBox.append(rs.getString(2) + "\n\n");
             }
             
         }
@@ -251,12 +394,29 @@ public class DbUtil
         {
             if(conn.isClosed())
             connectDb();
-        
-            String query = "INSERT INTO " + s_id + " VALUES "
-                    + "('" 
-                    + s_id + "' , '" + r_id + "', '" + message + "', CURRENT_TIMESTAMP "
+            //ADDING TO OWN TABLE
+            String query = "INSERT INTO " + s_id + "_" + r_id + "" + " VALUES "
+                    + "("
+                    + "?, ?, CURRENT_TIMESTAMP "
                     + ")";
+                    
+                  
             PreparedStatement st = conn.prepareStatement(query);
+            st.setString(1, "sent");
+            st.setString(2, message);
+
+            st.executeUpdate();
+            //ADDING TO RECEIVER TABLE
+            query = "INSERT INTO " + r_id + "_" + s_id + "" + " VALUES "
+                    + "("
+                    + "?, ?, CURRENT_TIMESTAMP "
+                    + ")";
+                    
+                  
+            st = conn.prepareStatement(query);
+            st.setString(1, "received");
+            st.setString(2, message);
+
             st.executeUpdate();
             
         }

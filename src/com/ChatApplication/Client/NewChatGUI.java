@@ -21,6 +21,7 @@ public class NewChatGUI extends javax.swing.JFrame
      */
     
     User user;
+    String availableUser = null;
     
     
     public NewChatGUI(User user)
@@ -246,6 +247,7 @@ public class NewChatGUI extends javax.swing.JFrame
             {
                 availabilityLable.setForeground(Color.green);
                 availabilityLable.setText("User is Available!");
+                availableUser = searchedUser;
                 addNewUser.setEnabled(true);
             }
             else if(flag == 2)
@@ -282,10 +284,12 @@ public class NewChatGUI extends javax.swing.JFrame
 
     private void addNewUserActionPerformed(java.awt.event.ActionEvent evt)//GEN-FIRST:event_addNewUserActionPerformed
     {//GEN-HEADEREND:event_addNewUserActionPerformed
-
         
-      
-
+        DbUtil.addFriend(user, availableUser);
+        DbUtil.initChatTable(user, availableUser);
+        HomeGUI.model.clear();
+        DbUtil.initChatList(HomeGUI.model, user);
+        this.dispose();
     }//GEN-LAST:event_addNewUserActionPerformed
 
     private void backToChatActionPerformed(java.awt.event.ActionEvent evt)//GEN-FIRST:event_backToChatActionPerformed
